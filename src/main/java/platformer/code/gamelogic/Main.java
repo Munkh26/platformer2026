@@ -1,7 +1,6 @@
 package platformer.code.gamelogic;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -47,7 +46,7 @@ public class Main extends GameBase implements PlayerDieListener, PlayerWinListen
 		levels = new LevelData[3];
 		try {
 			levels[0] = LeveldataLoader.loadLeveldata("src/main/java/platformer/maps/map1.txt");
-			levels[1] = LeveldataLoader.loadLeveldata("src/main/java/platformer/maps/testMap.txt");
+			levels[1] = LeveldataLoader.loadLeveldata("src/main/java/platformer/maps/waterMap.txt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
