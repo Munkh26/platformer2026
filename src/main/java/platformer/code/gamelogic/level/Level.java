@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.plaf.TreeUI;
-
 import platformer.code.gameengine.PhysicsObject;
 import platformer.code.gameengine.graphics.Camera;
 import platformer.code.gameengine.loaders.Mapdata;
@@ -214,34 +212,40 @@ public class Level {
 		}
 
 		map.addTile(col, row, w);
-		if(col+1 < map.getTiles().length && !(map.getTiles()[col+1][row] instanceof Water)) {
-			if (fullness == 3) {
-				water(col+1, row, map, 2);
-			}
-			else if (fullness == 2 && ((map.getTiles()[col+1][row].isSolid() == false || map.getTiles()[col+1][row].isSolid()) && map.getTiles()[col][row].isSolid())) {
-				water(col+1, row, map, 1);
-			}
-			//else if (fullness == 1 && map.getTiles()[col][row].isSolid() == true) {
-			//	water(col+1, row, map, 1);
-			//}
-		}
-
-		if (col-1 >= 0 && !(map.getTiles()[col-1][row] instanceof Water)) {
-			if (fullness == 3) {
-				water(col-1, row, map, 2);
-			}
-			else if (fullness == 2 && map.getTiles()[col][row].isSolid() == true) {
-				water(col-1, row, map, 1);
-			}
-			else if (fullness == 1 && map.getTiles()[col][row].isSolid() == true) {
-				water(col-1, row, map, 1);
-			}
-		}
 
 		if (row+1 < map.getTiles()[col].length && map.getTiles()[col][row+1].isSolid() == false) {
 			water(col, row+1, map, 0);
 		}
-	
+
+		else {
+			if(col+1 < map.getTiles().length && !(map.getTiles()[col+1][row] instanceof Water && !map.getTiles()[col+1][row].isSolid())) {
+				if (fullness == 3  && !map.getTiles()[col+1][row].isSolid()) {
+					water(col+1, row, map, 2);
+				}
+				else if (fullness == 2 && !map.getTiles()[col+1][row].isSolid()) {
+					water(col+1, row, map, 1);
+				}
+				else if (fullness == 1 && !map.getTiles()[col+1][row].isSolid()) {
+					water(col+1, row, map, 1);
+				}
+			}
+
+			if (col-1 >= 0 && !(map.getTiles()[col-1][row] instanceof Water)) {
+				if (fullness == 3 && !map.getTiles()[col-1][row].isSolid()) {
+					water(col-1, row, map, 2);
+				}
+				else if (fullness == 2 && !map.getTiles()[col-1][row].isSolid()) {
+					water(col-1, row, map, 1);
+				}
+				else if (fullness == 1 && !map.getTiles()[col-1][row].isSolid()) {
+					water(col-1, row, map, 1);
+				}
+			}
+		}
+		if (fullness == 0 && row+1 < map.getTiles()[col].length && map.getTiles()[col][row+1].isSolid()) {
+			water(col, row, map, 3);
+		}
+
 	}
 
 
