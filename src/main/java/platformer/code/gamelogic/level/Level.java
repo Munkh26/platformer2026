@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.TreeUI;
+
 import platformer.code.gameengine.PhysicsObject;
 import platformer.code.gameengine.graphics.Camera;
 import platformer.code.gameengine.loaders.Mapdata;
@@ -216,22 +218,22 @@ public class Level {
 			if (fullness == 3) {
 				water(col+1, row, map, 2);
 			}
-			else if (fullness == 2 && map.getTiles()[col+1][row].isSolid() == true) {
+			else if (fullness == 2 && ((map.getTiles()[col+1][row].isSolid() == false || map.getTiles()[col+1][row].isSolid()) && map.getTiles()[col][row].isSolid())) {
 				water(col+1, row, map, 1);
 			}
-			else if (fullness == 1 && map.getTiles()[col+1][row].isSolid() == true) {
-				water(col+1, row, map, 1);
-			}
+			//else if (fullness == 1 && map.getTiles()[col][row].isSolid() == true) {
+			//	water(col+1, row, map, 1);
+			//}
 		}
 
 		if (col-1 >= 0 && !(map.getTiles()[col-1][row] instanceof Water)) {
 			if (fullness == 3) {
 				water(col-1, row, map, 2);
 			}
-			else if (fullness == 2 && map.getTiles()[col-1][row].isSolid() == true) {
+			else if (fullness == 2 && map.getTiles()[col][row].isSolid() == true) {
 				water(col-1, row, map, 1);
 			}
-			else if (fullness == 1 && map.getTiles()[col-1][row].isSolid() == true) {
+			else if (fullness == 1 && map.getTiles()[col][row].isSolid() == true) {
 				water(col-1, row, map, 1);
 			}
 		}
