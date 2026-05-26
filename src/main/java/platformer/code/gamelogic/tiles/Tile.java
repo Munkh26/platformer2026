@@ -3,7 +3,6 @@ package platformer.code.gamelogic.tiles;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import platformer.code.gameengine.GameObject;
 import platformer.code.gameengine.hitbox.RectHitbox;
 import platformer.code.gameengine.maths.Vector2D;
 import platformer.code.gamelogic.level.Level;
@@ -62,5 +61,12 @@ public class Tile{
 	
 	public int getSize() {
 		return size;
+	}
+
+	//-----------------------------------Setter
+	//Pre-condition: When you call it, the parameter must be BufferedImage
+	//Pos-conditon: It sets the image to that
+	public void setImage(BufferedImage i) {
+		image = i;
 	}
 }
