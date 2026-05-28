@@ -1,5 +1,6 @@
 package platformer.code.gamelogic.tiles;
 
+
 import java.awt.image.BufferedImage;
 
 import platformer.code.gameengine.hitbox.RectHitbox;

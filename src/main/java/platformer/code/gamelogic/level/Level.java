@@ -250,7 +250,12 @@ public class Level {
 	
 	//Adds gas tiles until the requisite number of squares are filled or there is no more room 
 	private void addGas(int col, int row, Map map, int numSquaresToFill, ArrayList<Gas> placedThisRound) {
-		
+		int count = 0;
+		Gas g = new Gas(col, row, tileSize, tileset.getImage("GasOne"), this, 0);
+		map.addTile(col, row, g);
+		count++;
+		while (count < numSquaresToFill) {
+		}
 	}	
 
 	public void draw(Graphics g) {
