@@ -249,6 +249,8 @@ public class Level {
 	}
 	
 	//Adds gas tiles until the requisite number of squares are filled or there is no more room 
+	//Pre-conditon: Player hits a curved flower
+	//Pos-conditon: Gas fills the air according the rules and it will keep drawing gas until it reaches numSquaresToFill
 	private void addGas(int col, int row, Map map, int numSquaresToFill, ArrayList<Gas> placedThisRound) {
 		Gas g = new Gas(col, row, tileSize, tileset.getImage("GasOne"), this, 0);
 		map.addTile(col, row, g);
@@ -259,17 +261,17 @@ public class Level {
 			col = placedThisRound.get(index).getCol();
 			row = placedThisRound.get(index).getRow();
 			for (int i = 0; i < grid.length; i++) {
-				if ((col + grid[i][0] < map.getTiles().length || col + grid[i][0] > 0) && (row + grid[i][1] < map.getTiles().length || col + grid[i][1] > 0) && !(map.getTiles()[col+ grid[i][0]][row + grid[i][1]].isSolid()) && map.getTiles()[col+ grid[i][0]][row + grid[i][1]] instanceof Gas == false) {
+				if ((col + grid[i][1] < map.getTiles().length || col + grid[i][1] > 0) && (row + grid[i][0] < map.getTiles()[col].length || row + grid[i][0] > 0) && !(map.getTiles()[col+ grid[i][1]][row + grid[i][0]].isSolid()) && map.getTiles()[col+ grid[i][1]][row + grid[i][0]] instanceof Gas == false) {
 					if (placedThisRound.size() < numSquaresToFill) {
-						Gas g2 = new Gas(col+ grid[i][0], row + grid[i][1], tileSize, tileset.getImage("GasOne"), this, 0);
-						map.addTile(col+ grid[i][0], row + grid[i][1], g2);
+						Gas g2 = new Gas(col+ grid[i][1], row + grid[i][0], tileSize, tileset.getImage("GasOne"), this, 0);
+						map.addTile(col+ grid[i][1], row + grid[i][0], g2);
 						placedThisRound.add(g2);
 					}
 				}
 			}
 			index++;
 		}
-	}	
+	}
 
 	public void draw(Graphics g) {
 	   	 g.translate((int) -camera.getX(), (int) -camera.getY());
