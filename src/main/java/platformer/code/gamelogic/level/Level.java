@@ -46,6 +46,8 @@ public class Level {
 	private Tileset tileset;
 	public static float GRAVITY = 70;
 
+	private ArrayList<Water> waterList = new ArrayList<Water>();
+
 	public Level(LevelData leveldata) {
 		this.leveldata = leveldata;
 		mapdata = leveldata.getMapdata();
@@ -191,6 +193,18 @@ public class Level {
 
 			// Update the camera
 			camera.update(tslf);
+
+			// Update the water
+			for (int i = 0; i < waterList.size(); i++) {
+				waterList.get(i).update(tslf);
+				if (player.getHitbox().isIntersecting(waterList.get(i).getHitbox())) {
+					player.walkSpeed = 600;
+				}
+				else {
+					player.walkSpeed = 400;
+				}
+			}
+			
 		}
 	}
 	
@@ -214,6 +228,7 @@ public class Level {
 		}
 
 		map.addTile(col, row, w);
+		waterList.add(w);
 
 		if (row+1 < map.getTiles()[col].length && map.getTiles()[col][row+1].isSolid() == false) {
 			water(col, row+1, map, 0);
@@ -263,7 +278,7 @@ public class Level {
 			col = placedThisRound.get(index).getCol();
 			row = placedThisRound.get(index).getRow();
 			for (int i = 0; i < grid.length; i++) {
-				if ((col + grid[i][1] < map.getTiles().length || col + grid[i][1] > 0) && (row + grid[i][0] < map.getTiles()[col].length || row + grid[i][0] > 0) && !(map.getTiles()[col+ grid[i][1]][row + grid[i][0]].isSolid()) && map.getTiles()[col+ grid[i][1]][row + grid[i][0]] instanceof Gas == false) {
+				if (numSquaresToFill > 0 && (col + grid[i][1] < map.getTiles().length || col + grid[i][1] > 0) && (row + grid[i][0] < map.getTiles()[col].length || row + grid[i][0] > 0) && !(map.getTiles()[col+ grid[i][1]][row + grid[i][0]].isSolid()) && map.getTiles()[col+ grid[i][1]][row + grid[i][0]] instanceof Gas == false) {
 					if (placedThisRound.size() < numSquaresToFill) {
 						Gas g2 = new Gas(col+ grid[i][1], row + grid[i][0], tileSize, tileset.getImage("GasOne"), this, 0);
 						map.addTile(col+ grid[i][1], row + grid[i][0], g2);
