@@ -60,4 +60,5 @@ public class Player extends PhysicsObject{
 		
 		hitbox.draw(g);
 	}
+
 }

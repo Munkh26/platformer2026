@@ -46,8 +46,6 @@ public class Level {
 	private Tileset tileset;
 	public static float GRAVITY = 70;
 
-	private ArrayList<Water> waterList = new ArrayList<Water>();
-
 	public Level(LevelData leveldata) {
 		this.leveldata = leveldata;
 		mapdata = leveldata.getMapdata();
@@ -195,16 +193,14 @@ public class Level {
 			camera.update(tslf);
 
 			// Update the water
-			for (int i = 0; i < waterList.size(); i++) {
-				waterList.get(i).update(tslf);
-				if (player.getHitbox().isIntersecting(waterList.get(i).getHitbox())) {
-					player.walkSpeed = 600;
-				}
-				else {
-					player.walkSpeed = 400;
-				}
-			}
-			
+			if (player.getCollisionMatrix()[PhysicsObject.BOT] instanceof Water)
+				player.walkSpeed = 800;
+			if (player.getCollisionMatrix()[PhysicsObject.TOP] instanceof Water)
+				player.walkSpeed = 800;
+			if (player.getCollisionMatrix()[PhysicsObject.LEF] instanceof Water)
+				player.walkSpeed = 800;
+			if (player.getCollisionMatrix()[PhysicsObject.RIG] instanceof Water)
+				player.walkSpeed = 800;
 		}
 	}
 	
@@ -228,7 +224,6 @@ public class Level {
 		}
 
 		map.addTile(col, row, w);
-		waterList.add(w);
 
 		if (row+1 < map.getTiles()[col].length && map.getTiles()[col][row+1].isSolid() == false) {
 			water(col, row+1, map, 0);
