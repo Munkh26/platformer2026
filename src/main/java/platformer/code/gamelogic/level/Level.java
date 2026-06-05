@@ -1,5 +1,7 @@
 package platformer.code.gamelogic.level;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class Level {
 
 	private ArrayList<Enemy> enemiesList = new ArrayList<>();
 	private ArrayList<Flower> flowers = new ArrayList<>();
+	private ArrayList<Water> waters = new ArrayList<>();
 
 	private List<PlayerDieListener> dieListeners = new ArrayList<>();
 	private List<PlayerWinListener> winListeners = new ArrayList<>();
@@ -45,6 +48,8 @@ public class Level {
 	private int tileSize;
 	private Tileset tileset;
 	public static float GRAVITY = 70;
+	private long waterTime = 0;
+	private long poison = 5;
 
 	public Level(LevelData leveldata) {
 		this.leveldata = leveldata;
@@ -193,14 +198,21 @@ public class Level {
 			camera.update(tslf);
 
 			// Update the water
-			if (player.getCollisionMatrix()[PhysicsObject.BOT] instanceof Water)
-				player.walkSpeed = 800;
-			if (player.getCollisionMatrix()[PhysicsObject.TOP] instanceof Water)
-				player.walkSpeed = 800;
-			if (player.getCollisionMatrix()[PhysicsObject.LEF] instanceof Water)
-				player.walkSpeed = 800;
-			if (player.getCollisionMatrix()[PhysicsObject.RIG] instanceof Water)
-				player.walkSpeed = 800;
+			for (int i = 0; i < waters.size(); i++) {
+				waters.get(i).update(tslf);
+				if (player.getHitbox().isIntersecting(waters.get(i).getHitbox())) {
+					if (waterTime == 0) {	
+						waterTime = System.currentTimeMillis();
+					}
+					else {
+						if ((System.currentTimeMillis() - waterTime) / 1000 >= poison) {
+							waterTime = 0;
+						}
+					}
+
+					player.walkSpeed = 200;
+				}
+			}
 		}
 	}
 	
@@ -223,6 +235,7 @@ public class Level {
 			w = new Water(col, row, tileSize, tileset.getImage("Full_water"), this, 3);
 		}
 
+		waters.add(w);
 		map.addTile(col, row, w);
 
 		if (row+1 < map.getTiles()[col].length && map.getTiles()[col][row+1].isSolid() == false) {
@@ -324,6 +337,8 @@ public class Level {
 	   				 tile.draw(g);
 	   		 }
 	   	 }
+		 g.setColor(Color.RED);
+		 g.drawString(("" + (System.currentTimeMillis()-waterTime) / 1000), (int) player.getX(), (int) (player.getY()-20));
 
 
 	   	 // Draw the enemies
