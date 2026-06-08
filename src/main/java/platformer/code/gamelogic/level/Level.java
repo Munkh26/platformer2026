@@ -38,6 +38,7 @@ public class Level {
 	private ArrayList<Enemy> enemiesList = new ArrayList<>();
 	private ArrayList<Flower> flowers = new ArrayList<>();
 	private ArrayList<Water> waters = new ArrayList<>();
+	private ArrayList<Gas> gasList = new ArrayList<>();
 
 	private List<PlayerDieListener> dieListeners = new ArrayList<>();
 	private List<PlayerWinListener> winListeners = new ArrayList<>();
@@ -48,7 +49,7 @@ public class Level {
 	private int tileSize;
 	private Tileset tileset;
 	public static float GRAVITY = 70;
-	private long waterTime = 0;
+	private long gasTime = 0;
 	private long poison = 5;
 
 	public Level(LevelData leveldata) {
@@ -198,19 +199,29 @@ public class Level {
 			camera.update(tslf);
 
 			// Update the water
+			boolean check = false;
 			for (int i = 0; i < waters.size(); i++) {
 				waters.get(i).update(tslf);
 				if (player.getHitbox().isIntersecting(waters.get(i).getHitbox())) {
-					if (waterTime == 0) {	
-						waterTime = System.currentTimeMillis();
-					}
-					else {
-						if ((System.currentTimeMillis() - waterTime) / 1000 >= poison) {
-							waterTime = 0;
-						}
-					}
+					player.walkSpeed = 100;
+					check = true;
+				}
+				else if (check == false){
+					player.walkSpeed = 400;
+				}
+			}
+			check = false;
 
-					player.walkSpeed = 200;
+			//Update Gas
+			for (int i = 0; i < gasList.size(); i++) {
+				gasList.get(i).update(tslf);
+				if (player.getHitbox().isIntersecting(gasList.get(i).getHitbox())) {
+					if (gasTime == 0) {	
+						gasTime = System.currentTimeMillis();
+					}
+					else if ((System.currentTimeMillis() - gasTime) / 1000 >= poison){
+						onPlayerDeath();
+					}
 				}
 			}
 		}
@@ -296,6 +307,7 @@ public class Level {
 			}
 			index++;
 		}
+		gasList = new ArrayList<>(placedThisRound);
 	}
 
 	public void draw(Graphics g) {
@@ -338,7 +350,7 @@ public class Level {
 	   		 }
 	   	 }
 		 g.setColor(Color.RED);
-		 g.drawString(("" + (System.currentTimeMillis()-waterTime) / 1000), (int) player.getX(), (int) (player.getY()-20));
+		 g.drawString(("" + (System.currentTimeMillis()-gasTime) / 1000), (int) player.getX(), (int) (player.getY()-20));
 
 
 	   	 // Draw the enemies
