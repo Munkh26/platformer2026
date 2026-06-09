@@ -66,6 +66,10 @@ public class Level {
 	}
 
 	public void restartLevel() {
+		waters.clear();
+		gasList.clear();
+		gasTime = 0;
+
 		int[][] values = mapdata.getValues();
 		Tile[][] tiles = new Tile[width][height];
 
@@ -213,17 +217,25 @@ public class Level {
 			check = false;
 
 			//Update Gas
+			boolean inGas = false;
 			for (int i = 0; i < gasList.size(); i++) {
 				gasList.get(i).update(tslf);
 				if (player.getHitbox().isIntersecting(gasList.get(i).getHitbox())) {
-					if (gasTime == 0) {	
-						gasTime = System.currentTimeMillis();
-					}
-					else if ((System.currentTimeMillis() - gasTime) / 1000 >= poison){
-						onPlayerDeath();
-					}
+					inGas = true;
 				}
 			}
+			if (inGas == true) {
+				if (gasTime == 0) {	
+					gasTime = System.currentTimeMillis();
+				}
+				else if ((System.currentTimeMillis() - gasTime) / 1000 >= poison){
+					onPlayerDeath();
+					inGas = false;
+				}
+			}
+			else {
+				gasTime = 0;
+			}	
 		}
 	}
 	
@@ -293,7 +305,7 @@ public class Level {
 		placedThisRound.add(g);
 		int[][] grid = {{-1, 0}, {-1, 1}, {-1, -1}, {0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}};
 		int index = 0;
-		while (placedThisRound.size() < numSquaresToFill) {
+		while (placedThisRound.size() < numSquaresToFill && index < placedThisRound.size()) {
 			col = placedThisRound.get(index).getCol();
 			row = placedThisRound.get(index).getRow();
 			for (int i = 0; i < grid.length; i++) {
@@ -307,7 +319,7 @@ public class Level {
 			}
 			index++;
 		}
-		gasList = new ArrayList<>(placedThisRound);
+		gasList.addAll(placedThisRound);
 	}
 
 	public void draw(Graphics g) {
@@ -349,8 +361,19 @@ public class Level {
 	   				 tile.draw(g);
 	   		 }
 	   	 }
-		 g.setColor(Color.RED);
-		 g.drawString(("" + (System.currentTimeMillis()-gasTime) / 1000), (int) player.getX(), (int) (player.getY()-20));
+
+		 if (gasTime > 0) {
+			long elapsed = (System.currentTimeMillis() - gasTime) / 1000;
+			long left = poison - elapsed;
+			if (left < 0) {
+				left = 0;
+			}
+
+			g.setColor(Color.RED);
+			g.setFont(new Font("Ariel", Font.BOLD, 14));
+		 	g.drawString("POISON: " + left, (int) player.getX(), (int) (player.getY()-20));
+		 }
+		 
 
 
 	   	 // Draw the enemies
