@@ -39,6 +39,7 @@ public class Level {
 	private ArrayList<Flower> flowers = new ArrayList<>();
 	private ArrayList<Water> waters = new ArrayList<>();
 	private ArrayList<Gas> gasList = new ArrayList<>();
+	private ArrayList<SolidTile> robotList = new ArrayList<>();
 
 	private List<PlayerDieListener> dieListeners = new ArrayList<>();
 	private List<PlayerWinListener> winListeners = new ArrayList<>();
@@ -128,8 +129,10 @@ public class Level {
 					tiles[x][y] = new Water(xPosition, yPosition, tileSize, tileset.getImage("Half_water"), this, 2);
 				else if (values[x][y] == 21)
 					tiles[x][y] = new Water(xPosition, yPosition, tileSize, tileset.getImage("Quarter_water"), this, 1);
-				else if (values[x][y] == 22)
+				else if (values[x][y] == 22) {
 					tiles[x][y] = new SolidTile(xPosition, yPosition, tileSize, tileset.getImage("Robot"), this);
+					robotList.add((SolidTile) tiles[x][y]);
+				}
 			}
 
 		}
@@ -238,6 +241,9 @@ public class Level {
 			}	
 		}
 	}
+
+	//Bullet
+	
 	
 	
 	//#############################################################################################################

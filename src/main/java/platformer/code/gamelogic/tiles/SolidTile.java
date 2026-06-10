@@ -15,4 +15,12 @@ public class SolidTile extends Tile{
 	public String toString() {
 		return "I'm a solidTile at "+this.position.x+" "+this.position.y;
 	}
+
+	public float getX() {
+		return this.position.x;
+	}
+
+	public float getY() {
+		return this.position.y;
+	}
 }
