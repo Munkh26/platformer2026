@@ -12,6 +12,7 @@ import platformer.code.gameengine.loaders.Mapdata;
 import platformer.code.gameengine.loaders.Tileset;
 import platformer.code.gamelogic.GameResources;
 import platformer.code.gamelogic.Main;
+import platformer.code.gamelogic.bullet.Bullet;
 import platformer.code.gamelogic.enemies.Enemy;
 import platformer.code.gamelogic.player.Player;
 import platformer.code.gamelogic.tiledMap.Map;
@@ -28,6 +29,7 @@ public class Level {
 	private LevelData leveldata;
 	private Map map;
 	private Enemy[] enemies;
+	private Bullet[] bullets;
 	public static Player player;
 	private Camera camera;
 
@@ -40,6 +42,7 @@ public class Level {
 	private ArrayList<Water> waters = new ArrayList<>();
 	private ArrayList<Gas> gasList = new ArrayList<>();
 	private ArrayList<SolidTile> robotList = new ArrayList<>();
+	private ArrayList<Bullet> bulletList = new ArrayList<>();
 
 	private List<PlayerDieListener> dieListeners = new ArrayList<>();
 	private List<PlayerWinListener> winListeners = new ArrayList<>();
@@ -132,6 +135,7 @@ public class Level {
 				else if (values[x][y] == 22) {
 					tiles[x][y] = new SolidTile(xPosition, yPosition, tileSize, tileset.getImage("Robot"), this);
 					robotList.add((SolidTile) tiles[x][y]);
+					bulletList.add(new Bullet((xPosition*tileSize) - 80, (yPosition*tileSize), this));
 				}
 			}
 
@@ -142,6 +146,12 @@ public class Level {
 		for (int i = 0; i < enemiesList.size(); i++) {
 			enemies[i] = new Enemy(enemiesList.get(i).getX(), enemiesList.get(i).getY(), this);
 		}
+		//Bullet
+		bullets = new Bullet[bulletList.size()];
+		for (int i = 0; i < bulletList.size(); i++) {
+			bullets[i] = new Bullet(bulletList.get(i).getX(), bulletList.get(i).getY(), this);
+		}
+
 		player = new Player(leveldata.getPlayerX() * map.getTileSize(), leveldata.getPlayerY() * map.getTileSize(),
 				this);
 		camera.setFocusedObject(player);
@@ -199,6 +209,14 @@ public class Level {
 				}
 			}
 
+			//Update the bullet
+			for (int i = 0; i < bullets.length; i++) {
+				bullets[i].update(tslf);
+				if (player.getHitbox().isIntersecting(bullets[i].getHitbox())) {
+					onPlayerDeath();
+				}
+			}
+
 			// Update the map
 			map.update(tslf);
 
@@ -241,9 +259,6 @@ public class Level {
 			}	
 		}
 	}
-
-	//Bullet
-	
 	
 	
 	//#############################################################################################################
@@ -368,6 +383,8 @@ public class Level {
 	   		 }
 	   	 }
 
+		 //Draw Gas Timer
+
 		 if (gasTime > 0) {
 			long elapsed = (System.currentTimeMillis() - gasTime) / 1000;
 			long left = poison - elapsed;
@@ -385,6 +402,11 @@ public class Level {
 	   	 // Draw the enemies
 	   	 for (int i = 0; i < enemies.length; i++) {
 	   		 enemies[i].draw(g);
+	   	 }
+
+		// Draw the bullets
+	   	 for (int i = 0; i < bullets.length; i++) {
+	   		 bullets[i].draw(g);
 	   	 }
 
 
