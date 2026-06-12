@@ -135,7 +135,7 @@ public class Level {
 				else if (values[x][y] == 22) {
 					tiles[x][y] = new SolidTile(xPosition, yPosition, tileSize, tileset.getImage("Robot"), this);
 					robotList.add((SolidTile) tiles[x][y]);
-					bulletList.add(new Bullet((xPosition*tileSize) - 80, (yPosition*tileSize), this));
+					bulletList.add(new Bullet((xPosition*tileSize) - 80, (yPosition*tileSize) - 2, this, -1));
 				}
 			}
 
@@ -149,7 +149,7 @@ public class Level {
 		//Bullet
 		bullets = new Bullet[bulletList.size()];
 		for (int i = 0; i < bulletList.size(); i++) {
-			bullets[i] = new Bullet(bulletList.get(i).getX(), bulletList.get(i).getY(), this);
+			bullets[i] = new Bullet(bulletList.get(i).getX(), bulletList.get(i).getY(), this, -1);
 		}
 
 		player = new Player(leveldata.getPlayerX() * map.getTileSize(), leveldata.getPlayerY() * map.getTileSize(),
@@ -215,6 +215,19 @@ public class Level {
 				if (player.getHitbox().isIntersecting(bullets[i].getHitbox())) {
 					onPlayerDeath();
 				}
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.BOT] instanceof SolidTile) {
+				//	bulletList.remove(i);
+				}
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.TOP] instanceof SolidTile) {
+				//	bulletList.remove(i);
+				}
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.LEF] instanceof SolidTile) {
+				//	bulletList.remove(i);
+				}
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.RIG] instanceof SolidTile) {
+				//	bulletList.remove(i);
+				}
+
 			}
 
 			// Update the map
