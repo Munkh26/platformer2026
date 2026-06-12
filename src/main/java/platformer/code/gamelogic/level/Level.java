@@ -135,7 +135,8 @@ public class Level {
 				else if (values[x][y] == 22) {
 					tiles[x][y] = new SolidTile(xPosition, yPosition, tileSize, tileset.getImage("Robot"), this);
 					robotList.add((SolidTile) tiles[x][y]);
-					bulletList.add(new Bullet((xPosition*tileSize) - 80, (yPosition*tileSize) - 2, this, -1));
+					bulletList.add(new Bullet((xPosition*tileSize) - 60, (yPosition*tileSize) - 10, this, -1));
+					bulletList.add(new Bullet((xPosition*tileSize) + 60, (yPosition*tileSize) - 10, this, 1));
 				}
 			}
 
@@ -149,7 +150,12 @@ public class Level {
 		//Bullet
 		bullets = new Bullet[bulletList.size()];
 		for (int i = 0; i < bulletList.size(); i++) {
-			bullets[i] = new Bullet(bulletList.get(i).getX(), bulletList.get(i).getY(), this, -1);
+			if (bulletList.get(i).getDirect() == 1) {
+				bullets[i] = new Bullet(bulletList.get(i).getX(), bulletList.get(i).getY(), this, 1);
+			}
+			else {
+				bullets[i] = new Bullet(bulletList.get(i).getX(), bulletList.get(i).getY(), this, -1);
+			}
 		}
 
 		player = new Player(leveldata.getPlayerX() * map.getTileSize(), leveldata.getPlayerY() * map.getTileSize(),
@@ -215,17 +221,17 @@ public class Level {
 				if (player.getHitbox().isIntersecting(bullets[i].getHitbox())) {
 					onPlayerDeath();
 				}
-				if (bullets[i].getCollisionMatrix()[PhysicsObject.BOT] instanceof SolidTile) {
-				//	bulletList.remove(i);
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.LEF] instanceof SolidTile || bullets[i].getCollisionMatrix()[PhysicsObject.LEF] instanceof Spikes) {
+					bullets[i].setCurrX(bullets[i].getOriginalX());
 				}
-				if (bullets[i].getCollisionMatrix()[PhysicsObject.TOP] instanceof SolidTile) {
-				//	bulletList.remove(i);
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.RIG] instanceof SolidTile || bullets[i].getCollisionMatrix()[PhysicsObject.RIG] instanceof Spikes) {
+					bullets[i].setCurrX(bullets[i].getOriginalX());
 				}
-				if (bullets[i].getCollisionMatrix()[PhysicsObject.LEF] instanceof SolidTile) {
-				//	bulletList.remove(i);
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.BOT] instanceof SolidTile || bullets[i].getCollisionMatrix()[PhysicsObject.BOT] instanceof Spikes) {
+					bullets[i].setCurrX(bullets[i].getOriginalX());
 				}
-				if (bullets[i].getCollisionMatrix()[PhysicsObject.RIG] instanceof SolidTile) {
-				//	bulletList.remove(i);
+				if (bullets[i].getCollisionMatrix()[PhysicsObject.TOP] instanceof SolidTile || bullets[i].getCollisionMatrix()[PhysicsObject.TOP] instanceof Spikes) {
+					bullets[i].setCurrX(bullets[i].getOriginalX());
 				}
 
 			}

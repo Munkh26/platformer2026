@@ -11,15 +11,19 @@ import platformer.code.gamelogic.level.Level;
 
 public class Bullet extends PhysicsObject{
 
-	private float walkSpeed = 80;
+	private float walkSpeed = 50;
 	private BufferedImage image;
+	private float originalX;
+	private int direct;
 	
 	public Bullet(float x, float y, Level level, int direction) {
 		super(x, y,(int)(level.getLevelData().getTileSize()*1.5), (int)(level.getLevelData().getTileSize()*1.5), level);
 		movementVector.x = walkSpeed * direction;
-		this.hitbox = new RectHitbox(this, 10, 10, width - 30, height - 30);
+		this.hitbox = new RectHitbox(this, 12, 26, width - 25, height - 40);
+		originalX = x;
+		direct = direction;
 		try {
-			this.image = ImageLoader.loadImage("src/main/java/platformer/gfx/Enemy.png");
+			this.image = ImageLoader.loadImage("src/main/java/platformer/gfx/Bullet.png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -31,6 +35,9 @@ public class Bullet extends PhysicsObject{
 		super.update(tslf);
 		movementVector.y = 0;
 		position.y = positionY;
+		if (movementVector.x == 0) {
+            movementVector.x = walkSpeed * direct;
+        }
 	}
 	
 	@Override
@@ -38,6 +45,15 @@ public class Bullet extends PhysicsObject{
 		g.drawImage(image, (int)position.x, (int)position.y, width, height, null);
 		hitbox.draw(g);
 	}
-	
+
+	public float getOriginalX() {
+		return originalX;
+	}
+	public void setCurrX(float x) {
+		this.position.x = x;
+	}
+	public int getDirect() {
+		return direct;
+	}
 }
 
