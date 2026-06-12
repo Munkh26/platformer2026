@@ -13,17 +13,19 @@ public class Bullet extends PhysicsObject{
 	private float walkSpeed = 80;
 	private BufferedImage image;
 	
-	public Bullet(float x, float y, Level level) {
+	public Bullet(float x, float y, Level level, int direction) {
 		super(x, y,(int)(level.getLevelData().getTileSize()*1.5), (int)(level.getLevelData().getTileSize()*1.5), level);
-		movementVector.x = walkSpeed;
+		movementVector.x = walkSpeed * direction;
 		this.hitbox = new RectHitbox(this, 10, 10, width - 30, height - 30);
 		this.image = GameResources.enemy;
 	}
 	
 	@Override
 	public void update(float tslf) {
+		float currentXSpeed = movementVector.x;
 		super.update(tslf);
-		movementVector.x = walkSpeed;
+		movementVector.y = 0;
+		movementVector.x = currentSpeed;
 	}
 	
 	@Override
