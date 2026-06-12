@@ -215,7 +215,7 @@ public class Level {
 				}
 			}
 
-			//Update the bullet
+			//Update the Bullets
 			for (int i = 0; i < bullets.length; i++) {
 				bullets[i].update(tslf);
 				if (player.getHitbox().isIntersecting(bullets[i].getHitbox())) {
