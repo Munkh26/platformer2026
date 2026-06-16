@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import platformer.code.gameengine.PhysicsObject;
 import platformer.code.gameengine.hitbox.RectHitbox;
 import platformer.code.gameengine.loaders.ImageLoader;
-import platformer.code.gamelogic.GameResources;
 import platformer.code.gamelogic.level.Level;
 
 public class Bullet extends PhysicsObject{
@@ -19,7 +18,7 @@ public class Bullet extends PhysicsObject{
 	public Bullet(float x, float y, Level level, int direction) {
 		super(x, y,(int)(level.getLevelData().getTileSize()*1.5), (int)(level.getLevelData().getTileSize()*1.5), level);
 		movementVector.x = walkSpeed * direction;
-		this.hitbox = new RectHitbox(this, 12, 26, width - 25, height - 40);
+		this.hitbox = new RectHitbox(this, 12, 26, width - 27, height - 43);
 		originalX = x;
 		direct = direction;
 		try {

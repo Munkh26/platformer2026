@@ -135,8 +135,8 @@ public class Level {
 				else if (values[x][y] == 22) {
 					tiles[x][y] = new SolidTile(xPosition, yPosition, tileSize, tileset.getImage("Robot"), this);
 					robotList.add((SolidTile) tiles[x][y]);
-					bulletList.add(new Bullet((xPosition*tileSize) - 60, (yPosition*tileSize) - 10, this, -1));
-					bulletList.add(new Bullet((xPosition*tileSize) + 60, (yPosition*tileSize) - 10, this, 1));
+					bulletList.add(new Bullet((xPosition*tileSize) - 70, (yPosition*tileSize) - 10, this, -1));
+					bulletList.add(new Bullet((xPosition*tileSize) + 70, (yPosition*tileSize) - 10, this, 1));
 				}
 			}
 
