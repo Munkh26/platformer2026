@@ -18,7 +18,7 @@ public class Bullet extends PhysicsObject{
 	public Bullet(float x, float y, Level level, int direction) {
 		super(x, y,(int)(level.getLevelData().getTileSize()*1.5), (int)(level.getLevelData().getTileSize()*1.5), level);
 		movementVector.x = walkSpeed * direction;
-		this.hitbox = new RectHitbox(this, 20, 26, 60, 40);
+		this.hitbox = new RectHitbox(this, 23, 43, 95, 75);
 		originalX = x;
 		direct = direction;
 		try {
